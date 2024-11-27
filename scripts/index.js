@@ -1,27 +1,31 @@
-const placesContainer = document.querySelector('.places__list')
+const placesContainer = document.querySelector('.places__list');
 
-function renderPlaces() {
+renderInitialPlaces();
+
+function renderInitialPlaces() {
   initialCards.forEach((card) => {
+    const placeCard = createPlace(card);
 
-  let placeCard = createPlace(card.name, card.link)
-
-    placesContainer.append(placeCard)
-  })
+    placesContainer.append(placeCard);
+  });
 }
 
-function createPlace(name, link) {
-  const placeTemplate = document.querySelector('#card-template').content
-  const placeItem = placeTemplate.querySelector('.places__item').cloneNode(true)
+function createPlace(cardData) {
+  const placeTemplate = document.querySelector('#card-template').content;
+  const placeItem = placeTemplate
+    .querySelector('.places__item')
+    .cloneNode(true);
 
-  placeItem.querySelector('.card__title').textContent = name
-  placeItem.querySelector('.card__image').setAttribute('src', link)
-  placeItem.querySelector('.card__delete-button').addEventListener('click', removePlace)
+  placeItem.querySelector('.card__title').textContent = cardData.name;
+  placeItem.querySelector('.card__image').src = cardData.link;
+  placeItem.querySelector('.card__image').alt = cardData.name;
+  placeItem
+    .querySelector('.card__delete-button')
+    .addEventListener('click', removePlace);
 
-  return placeItem
+  return placeItem;
 }
 
 function removePlace(event) {
-  event.target.parentElement.remove()
+  event.target.closest('.places__item').remove();
 }
-
-renderPlaces()
