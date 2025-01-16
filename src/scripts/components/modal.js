@@ -4,6 +4,8 @@ function openModal(target) {
   target.classList.add(modalVisibleClass);
 
   document.addEventListener('keydown', closeModalOnEsc);
+
+  target.addEventListener('click', closeModalOnClick);
 }
 
 function closeModal(target) {
@@ -15,6 +17,15 @@ function closeModal(target) {
 function closeModalOnEsc(evt) {
   if (evt.key === 'Escape') {
     closeModal(document.querySelector(`.${modalVisibleClass}`));
+  }
+}
+
+function closeModalOnClick(evt) {
+  if (
+    evt.target === evt.currentTarget ||
+    evt.target.classList.contains('popup__close')
+  ) {
+    closeModal(evt.currentTarget);
   }
 }
 
