@@ -12,10 +12,25 @@
     "lint": "stylelint './src/**/*.css'",
     "lintfix": "stylelint './src/**/*.css' --fix",
     "checkAll": "npm run check && npm run lint",
-    "fixAll": "npm run format && npm run lintfix"
+    "fixAll": "npm run format && npm run lintfix",
+    "build": "webpack --mode production",
+    "dev": "webpack serve"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "babel-loader": "^9.2.1",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.3",
+    "mini-css-extract-plugin": "^2.9.2",
     "prettier": "^2.8.7",
-    "stylelint": "^15.4.0"
+    "stylelint": "^15.4.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  },
+  "dependencies": {
+    "core-js": "^3.39.0"
   }
 }
