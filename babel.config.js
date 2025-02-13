@@ -15,6 +15,9 @@ const presets = [
       // использовать полифилы для браузеров из свойства target
       // по умолчанию babel использует полифилы библиотеки core-js
       useBuiltIns: 'entry',
+      corejs: {
+        version: "3.39"
+      }
     },
   ],
 ];

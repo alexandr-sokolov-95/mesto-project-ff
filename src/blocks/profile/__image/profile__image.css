@@ -9,6 +9,20 @@
   margin: 0 29px 0 0;
 }
 
+.profile__image-hover {
+  width: 100%;
+  height: 100%;
+  background-image: url(/src/images/avatar-edit-icon.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+}
+
+.profile__image:hover .profile__image-hover {
+  opacity: 1;
+}
+
 @media screen and (max-width: 740px) {
 
   .profile__image {

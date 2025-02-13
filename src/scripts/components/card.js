@@ -1,5 +1,6 @@
 export function createCard(
   cardData,
+  userId,
   callbackLike,
   callbackModal,
   callbackRemove
@@ -11,6 +12,7 @@ export function createCard(
   const placeTitle = placeItem.querySelector('.card__title');
   const placeImage = placeItem.querySelector('.card__image');
   const placeLikeBtn = placeItem.querySelector('.card__like-button');
+  const placeLikeCount = placeItem.querySelector('.card__like-count');
   const placeDeleteBtn = placeItem.querySelector('.card__delete-button');
 
   placeTitle.textContent = cardData.name;
@@ -18,16 +20,18 @@ export function createCard(
   placeImage.alt = cardData.name;
   placeImage.addEventListener('click', callbackModal);
   placeLikeBtn.addEventListener('click', callbackLike);
-  placeDeleteBtn.addEventListener('click', callbackRemove);
+
+  placeLikeCount.textContent = cardData.likes.length;
+
+  let isLiked = cardData.likes.find((like) => userId === like._id);
+
+  isLiked
+    ? placeLikeBtn.classList.add('card__like-button_is-active')
+    : placeLikeBtn.classList.remove('card__like-button_is-active');
+
+  cardData.owner._id === userId
+    ? placeDeleteBtn.addEventListener('click', callbackRemove)
+    : placeDeleteBtn.remove();
 
   return placeItem;
-}
-
-export function likeCard(evt) {
-  const likeBtn = evt.target;
-  likeBtn.classList.toggle('card__like-button_is-active');
-}
-
-export function removeCard(card) {
-  card.remove();
 }
