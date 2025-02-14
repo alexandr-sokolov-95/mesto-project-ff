@@ -115,8 +115,8 @@ function resetForm(formElement, params) {
     inputErrorClass,
     errorClass,
   } = params;
-  let inputs = Array.from(formElement.querySelectorAll(inputSelector));
-  let submit = formElement.querySelector(submitButtonSelector);
+  const inputs = Array.from(formElement.querySelectorAll(inputSelector));
+  const submit = formElement.querySelector(submitButtonSelector);
 
   formElement.reset();
 
@@ -125,7 +125,6 @@ function resetForm(formElement, params) {
   });
 
   toggleFormButton(submit, inactiveButtonClass, inputs);
-  submit.textContent = 'Сохранить';
 }
 
 export { enableFormsValidation, resetForm };

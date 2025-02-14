@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { openModal, closeModal } from './scripts/components/modal';
-import { createCard } from './scripts/components/card';
+import { createCard, toggleCardLike, removeCard } from './scripts/components/card';
 import {
   enableFormsValidation,
   resetForm,
@@ -12,9 +12,6 @@ import {
   patchAuthorServer,
   getInitialCards,
   addCardServer,
-  deleteCardServer,
-  likeCardServer,
-  unlikeCardServer,
 } from './scripts/components/api';
 
 const cardsContainer = document.querySelector('.places__list');
@@ -98,59 +95,70 @@ function openImageModal(evt) {
   openModal(imageModal);
 }
 
-function savingFormMessage(buttonElement, message) {
+function saveFormMessage(buttonElement, message) {
   buttonElement.textContent = message;
 }
 
 function handleAvatarFormSubmission(evt) {
   evt.preventDefault();
 
-  let newAvatar = {
-    avatar: avatarFormLink.value,
-  };
+  let saveButton = evt.target.querySelector('.popup__button')
+  let newAvatar = { avatar: avatarFormLink.value };
+
+  saveFormMessage(saveButton, 'Сохраняем...');
 
   patchAvatarServer(newAvatar)
     .then(() => {
-      savingFormMessage(
-        evt.target.querySelector('.popup__button'),
-        'Сохраняем...'
-      );
       profileAvatar.style.backgroundImage = `url(${avatarFormLink.value})`;
 
       closeModal(evt.target.closest('.popup'));
     })
-    .catch(catchError);
+    .catch((err) => {
+      saveFormMessage(saveButton, 'Что-то пошло не так')
+      catchError(err)
+    })
+    .finally(() => {
+      saveFormMessage(saveButton, 'Сохранить')
+    })
 }
 
 function handleEditAuthorFormSubmisstion(evt) {
   evt.preventDefault();
 
+  let saveButton = evt.target.querySelector('.popup__button');
   let newAuthor = {
     name: editFormName.value,
     about: editFormDesc.value,
   };
 
+  saveFormMessage(saveButton, 'Сохраняем...');
+
   patchAuthorServer(newAuthor)
     .then(() => {
-      savingFormMessage(
-        evt.target.querySelector('.popup__button'),
-        'Сохраняем...'
-      );
 
       editAuthor(newAuthor.name, newAuthor.about);
 
       closeModal(evt.target.closest('.popup'));
     })
-    .catch(catchError);
+    .catch((err) => {
+      saveFormMessage(saveButton, 'Что-то пошло не так')
+      catchError(err)
+    })
+    .finally(() => {
+      saveFormMessage(saveButton, 'Сохранить')
+    })
 }
 
 function handleNewPlaceFormSubmission(evt) {
   evt.preventDefault();
 
+  let saveButton = evt.target.querySelector('.popup__button');
   let cardData = {
     name: newPlaceFormName.value,
     link: newPlaceFormLink.value,
   };
+
+  saveFormMessage(saveButton, 'Сохраняем...');
 
   addCardServer(cardData)
     .then((data) => {
@@ -167,7 +175,7 @@ function handleNewPlaceFormSubmission(evt) {
         }
       );
 
-      savingFormMessage(
+      saveFormMessage(
         evt.target.querySelector('.popup__button'),
         'Сохраняем...'
       );
@@ -177,38 +185,13 @@ function handleNewPlaceFormSubmission(evt) {
       closeModal(evt.target.closest('.popup'));
       evt.target.reset();
     })
-    .catch(catchError);
-}
-
-function likeCard(likeButtonElement, cardId) {
-  likeCardServer(cardId)
-    .then((likeData) => {
-      likeButtonElement.classList.add('card__like-button_is-active');
-      likeButtonElement.nextElementSibling.innerHTML = likeData.likes.length;
+    .catch((err) => {
+      saveFormMessage(saveButton, 'Что-то пошло не так')
+      catchError(err)
     })
-    .catch(catchError);
-}
-
-function unlikeCard(likeButtonElement, cardId) {
-  unlikeCardServer(cardId)
-    .then((likeData) => {
-      likeButtonElement.classList.remove('card__like-button_is-active');
-      likeButtonElement.nextElementSibling.innerHTML = likeData.likes.length;
+    .finally(() => {
+      saveFormMessage(saveButton, 'Сохранить')
     })
-    .catch(catchError);
-}
-
-function toggleCardLike(likeButtonElement, cardId) {
-  if (!likeButtonElement.classList.contains('card__like-button_is-active')) {
-    likeCard(likeButtonElement, cardId);
-  } else {
-    unlikeCard(likeButtonElement, cardId);
-  }
-}
-
-function removeCard(cardElement, cardId) {
-  cardElement.remove();
-  deleteCardServer(cardId);
 }
 
 let pageLoadData = [getAuthorServer(), getInitialCards()];

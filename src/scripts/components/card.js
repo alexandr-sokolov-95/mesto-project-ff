@@ -1,4 +1,6 @@
-export function createCard(
+import { catchError, likeCardServer, unlikeCardServer, deleteCardServer } from "./api";
+
+function createCard(
   cardData,
   userId,
   callbackLike,
@@ -35,3 +37,40 @@ export function createCard(
 
   return placeItem;
 }
+
+
+function likeCard(likeButtonElement, cardId) {
+  likeCardServer(cardId)
+    .then((likeData) => {
+      likeButtonElement.classList.add('card__like-button_is-active');
+      likeButtonElement.nextElementSibling.innerHTML = likeData.likes.length;
+    })
+    .catch(catchError);
+}
+
+function unlikeCard(likeButtonElement, cardId) {
+  unlikeCardServer(cardId)
+    .then((likeData) => {
+      likeButtonElement.classList.remove('card__like-button_is-active');
+      likeButtonElement.nextElementSibling.innerHTML = likeData.likes.length;
+    })
+    .catch(catchError);
+}
+
+function toggleCardLike(likeButtonElement, cardId) {
+  if (!likeButtonElement.classList.contains('card__like-button_is-active')) {
+    likeCard(likeButtonElement, cardId);
+  } else {
+    unlikeCard(likeButtonElement, cardId);
+  }
+}
+
+function removeCard(cardElement, cardId) {
+  deleteCardServer(cardId)
+    .then(() => {
+      cardElement.remove();
+    })
+    .catch(catchError)
+}
+
+export { createCard, toggleCardLike, removeCard }
